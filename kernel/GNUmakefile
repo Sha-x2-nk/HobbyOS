@@ -41,7 +41,7 @@ KCXX_FLAGS			+=							\
 						-fno-exceptions			\
 						$(SHARED_FLAGS)			\
 
-KC_FLAGS			+=							\
+KCC_FLAGS			+=							\
 						-std=gnu11				\
 						$(SHARED_FLAGS)			\
 
@@ -62,6 +62,8 @@ KLD_FLAGS_GCC		:=	$(KLD_FLAGS_GCC),-pie,-ztext,-zmax-page-size=0x1000,-melf_x86_
 # -lk means libk - with extension .a or .so
 KLIBS				+=							\
 						-nostdlib				\
+						-lk						\
+						-lk++					\
 
 # Searching files 
 CXX_FILES			=	$(shell find -L * -type f -name '*.cpp')
@@ -100,7 +102,7 @@ obj/%.cpp.o: %.cpp GNUmakefile include/limine.h
 # Compilation rules for *.c files.
 obj/%.c.o: %.c GNUmakefile include/limine.h
 	mkdir -p "$$(dirname $@)"
-	$(KC) $(KC_FLAGS) $(KCPP_FLAGS) -c $< -o $@
+	$(KCC) $(KC_FLAGS) $(KCPP_FLAGS) -c $< -o $@
 
 .PHONY: install
 install: install-headers install-kernel

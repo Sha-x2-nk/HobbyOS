@@ -57,7 +57,7 @@ export LIB_DIR
 .PHONY: all
 all: $(IMAGE_NAME).iso
 
-$(IMAGE_NAME).iso: limine.cfg limine/limine kernel
+$(IMAGE_NAME).iso: limine.cfg limine/limine libc libc++ kernel
 	mkdir -p iso_root/boot
 
 	cp -v $(DEST_DIR)$(BOOT_DIR)/$(KERNEL_NAME) iso_root/boot/
@@ -78,6 +78,14 @@ limine/limine:
 	git clone https://github.com/limine-bootloader/limine.git --branch=v7.x-binary --depth=1
 	$(MAKE) -C limine
 
+.PHONY: libc
+libc:
+	$(MAKE) -C libc install
+
+.PHONY: libc++
+libc:
+	$(MAKE) -C libc++ install
+
 .PHONY: kernel
 kernel:
 	$(MAKE) -C kernel install
@@ -94,15 +102,21 @@ install: $(IMAGE_NAME).iso
 .PHONY: clean
 clean:
 	$(MAKE) -C kernel clean
+	$(MAKE) -C libc++ clean
+	$(MAKE) -C libc clean
 	rm -rf $(IMAGE_NAME).iso
 
 .PHONY: distclean
 distclean:
 	$(MAKE) -C kernel distclean
+	$(MAKE) -C libc++ distclean
+	$(MAKE) -C libc distclean
 	rm -rf limine
 
 .PHONY: uninstall
 uninstall:
 	$(MAKE) -C kernel uninstall
+	$(MAKE) -C libc++ uninstall
+	$(MAKE) -C libc uninstall
 	rm -rf $(SYSROOT)
 	rm -rf iso
