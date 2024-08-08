@@ -2,15 +2,17 @@
 #include <cstdint>  /* uint32_t */
 #include <cstddef>  /* size_t, null */
 
-
 /* Limine headers */ 
 #include "limine.h"
 
 /* kernel utils */
 #include "kernel/kernelUtils.hpp"
 
-/* serial io */
+/* serial IO */
 #include "drivers/serial.hpp"
+
+/* gdt */
+#include "gdt/gdt.hpp"
 
 /*
     Set the base revision to 2, this is recommended as this is the latest
@@ -93,7 +95,13 @@ extern "C" void kmain() {
     if ( serial::init() == false /* failed to initialise */) {
         suspendKernel();
     }
-    
+
+    serial::transmit("Serial IO setup.\n");
+
+    gdt::load(); /* load new gdt in register */
+    gdt::flush(); /* Reload the current selectors since they're currently using cached info from prv GDT */
+
+    serial::transmit("New GDT loaded.\n");
 
     /* hang */
     suspendKernel();

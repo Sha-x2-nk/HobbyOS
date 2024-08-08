@@ -33,3 +33,4 @@ make distclean  # also removes downloaded stuff - like limine
 * booted using limine bootloader.
 * Added C/C++ std lib templates and make rules. Currently contains string functions.
 * Added serial I/O support until printf.
+* Added code for installing new GDT.
