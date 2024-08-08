@@ -83,7 +83,7 @@ libc:
 	$(MAKE) -C libc install
 
 .PHONY: libc++
-libc:
+libc++:
 	$(MAKE) -C libc++ install
 
 .PHONY: kernel

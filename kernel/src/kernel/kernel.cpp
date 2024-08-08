@@ -9,6 +9,9 @@
 /* kernel utils */
 #include "kernel/kernelUtils.hpp"
 
+/* serial io */
+#include "drivers/serial.hpp"
+
 /*
     Set the base revision to 2, this is recommended as this is the latest
     base revision described by the Limine boot protocol specification.
@@ -86,6 +89,13 @@ extern "C" void kmain() {
         fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xFFFFFFFF;
     }
 
+    /* Initialising serial I/O */
+    if ( serial::init() == false /* failed to initialise */) {
+        suspendKernel();
+    }
+    
+
+    /* hang */
     suspendKernel();
 
 }
