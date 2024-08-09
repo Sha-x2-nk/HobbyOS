@@ -57,12 +57,12 @@ export LIB_DIR
 .PHONY: all
 all: $(IMAGE_NAME).iso
 
-$(IMAGE_NAME).iso: limine.cfg limine/limine libc libc++ kernel
+$(IMAGE_NAME).iso: limine.conf limine/limine libc libc++ kernel
 	mkdir -p iso_root/boot
 
 	cp -v $(DEST_DIR)$(BOOT_DIR)/$(KERNEL_NAME) iso_root/boot/
 	mkdir -p iso_root/boot/limine
-	cp -v limine.cfg iso_root/boot/limine
+	cp -v limine.conf iso_root/boot/limine
 	mkdir -p iso_root/EFI/BOOT
 	cp -v limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin iso_root/boot/limine
 	cp -v limine/BOOTX64.EFI iso_root/EFI/BOOT/
@@ -75,7 +75,7 @@ $(IMAGE_NAME).iso: limine.cfg limine/limine libc libc++ kernel
 
 limine/limine:
 	rm -rf limine
-	git clone https://github.com/limine-bootloader/limine.git --branch=v7.x-binary --depth=1
+	git clone https://github.com/limine-bootloader/limine.git --branch=v8.x-binary --depth=1
 	$(MAKE) -C limine
 
 .PHONY: libc

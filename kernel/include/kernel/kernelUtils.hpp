@@ -7,7 +7,7 @@
 void suspendKernel();
 
 /* Utility function to send and recieve a byte from serial ports */
-uint8_t in_byte(uint16_t port);
-void out_byte(uint16_t port, uint8_t data);
+std::uint8_t in_byte(std::uint16_t port);
+void out_byte(std::uint16_t port, std::uint8_t data);
 
 #endif

@@ -46,7 +46,9 @@ namespace gdt {
     /* loads new GDT */
     void load() {
         const int NUM_ENTRIES = 5; /* 5 entries in GDT */
-        uint64_t gdt_entries[NUM_ENTRIES];
+
+        /* STATIC is important, otherwise entries will be cleared from memory once out of function scope. */
+        static uint64_t gdt_entries[NUM_ENTRIES];
 
         /* First entry null */
         gdt_entries[0] = 0;
@@ -84,7 +86,8 @@ namespace gdt {
                         );
 
         /* Preparing a struct to feed to lgdt register */
-        struct GDTR {
+        /* STATIC is important, otherwise entries will be cleared from memory once out of function scope. */
+        static struct GDTR {
             uint16_t limit;
             uint64_t address;
         } __attribute__((packed)) example_gdtr;

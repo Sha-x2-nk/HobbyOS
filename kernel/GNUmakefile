@@ -26,7 +26,7 @@ SHARED_FLAGS		+=							\
 						-fno-stack-protector	\
 						-fno-stack-check		\
 						-fno-lto				\
-						-fPIE					\
+						-fno-PIC				\
 						-m64					\
 						-march=x86-64			\
 						-mno-80387				\
@@ -34,6 +34,7 @@ SHARED_FLAGS		+=							\
 						-mno-sse				\
 						-mno-sse2				\
 						-mno-red-zone			\
+						-mcmodel=kernel			\
 
 KCXX_FLAGS			+=							\
 						-std=gnu++20			\
@@ -53,11 +54,10 @@ KCPP_FLAGS			+=							\
 
 KLD_FLAGS			+=							\
 						-melf_x86_64			\
-						-pie					\
-						-ztext					\
+						-static					\
 						-zmax-page-size=0x1000	\
 
-KLD_FLAGS_GCC		:=	$(KLD_FLAGS_GCC),-pie,-ztext,-zmax-page-size=0x1000,-melf_x86_64
+KLD_FLAGS_GCC		:=	$(KLD_FLAGS_GCC),-melf_x86_64,-static,-zmax-page-size=0x1000
 
 # -lk means libk - with extension .a or .so
 KLIBS				+=							\
@@ -78,18 +78,10 @@ include/limine.h:
 	mkdir -p "$$(dirname $@)"
 	curl -Lo $@ https://github.com/limine-bootloader/limine/raw/trunk/limine.h
 
-# Link rules for the final kernel executable.	\
-The magic printf/dd command is used to force the final ELF file type to ET_DYN. \
-GNU binutils, for silly reasons, forces the ELF type to ET_EXEC even for \
-relocatable PIEs, if the base load address is non-0. \
-See https://sourceware.org/bugzilla/show_bug.cgi?id=31795 for more information. 
-
 # linkage done through g++. with ld - you'll have to manuall set -L PATH_TO_SYSROOT_LIB
 bin/$(KERNEL_NAME): GNUmakefile linker.ld $(OBJ)
 	mkdir -p "$$(dirname $@)"
 	$(KCXX) $(OBJ) $(KCXX_FLAGS) $(KLIBS) -o $@ -Tlinker.ld $(KLD_FLAGS_GCC)
-
-	printf '\003' | dd of=$@ bs=1 count=1 seek=16 conv=notrunc 2>/dev/null
 
 # Include header dependencies.
 -include $(HEADER_DEPS)

@@ -20,7 +20,7 @@ SHARED_FLAGS		+=							\
 						-fno-stack-protector	\
 						-fno-stack-check		\
 						-fno-lto				\
-						-fPIE					\
+						-fno-PIC				\
 						-m64					\
 						-march=x86-64			\
 						-mno-80387				\
@@ -28,6 +28,7 @@ SHARED_FLAGS		+=							\
 						-mno-sse				\
 						-mno-sse2				\
 						-mno-red-zone			\
+						-mcmodel=kernel			\
 
 KC_FLAGS			+=							\
 						-std=gnu11				\

@@ -1,6 +1,9 @@
 #include "drivers/serial.hpp"
 #include "kernel/kernelUtils.hpp"
 
+#include <cstdint> /* uint8_t */
+#include <cstddef> /* size_t */
+
 #define COM1_PORT 0x3F8
 namespace serial {
 
@@ -39,12 +42,12 @@ namespace serial {
         while (is_transmit_buffer_empty() == false) {}
 
         /* if not empty */
-        out_byte(COM1_PORT, static_cast<uint8_t> (c));
+        out_byte(COM1_PORT, static_cast<std::uint8_t> (c));
     }
 
     /* transmit function */
-    void transmit(char* s) {
-        int len = 0;
+    void transmit(const char* s) {
+        std::size_t len = 0;
         
         while (s[len]) {
             transmit(s[len]);

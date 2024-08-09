@@ -13,7 +13,7 @@ namespace serial {
     void transmit(char c);
 
     /* transmit function */
-    void transmit(char* s);
+    void transmit(const char* s);
     
 } /* namspace serial */
 
